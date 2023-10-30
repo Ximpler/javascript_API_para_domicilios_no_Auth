@@ -1,4 +1,5 @@
 import Pedidos from '../models/Pedidos';
+import Restaurante from '../models/Restaurante';
 
 export async function getPedido(req, res) {
   const pedidoId = req.params.id; // Obtén el ID del pedido desde la URL
@@ -58,10 +59,22 @@ export async function createPedido(req, res) {
     let nuevoPedido = req.body;
     const pedido = new Pedidos(nuevoPedido);
     const resultado = await pedido.save();
+    await actualizarPopularidadRestaurante(req.body.id_restaurante);
+
     res.status(200).json(resultado);
   } catch (err) {
     res.status(500).json(err);
   }
+}
+
+async function actualizarPopularidadRestaurante(restauranteId) {
+    const cantidadPedidos = await Pedido.countDocuments({ id_restaurante: restauranteId }).exec();
+    const restaurante = await Restaurante.findById(restauranteId);
+  
+    if (restaurante) {
+      restaurante.popularidad = cantidadPedidos;
+      await restaurante.save();
+    }
 }
 
 export async function patchPedido(req, res) {
