@@ -63,7 +63,7 @@ export async function deleteProducto(req, res) {
     const productoEliminado = await Productos.findOneAndUpdate({_id : req.params.id,  'inhabilitado.valor': false  }, {
       inhabilitado: { valor: true, fecha_inhabilitado: new Date() },
     });
-    console.log(productoEliminado);
+
     if (!productoEliminado) {
       return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }

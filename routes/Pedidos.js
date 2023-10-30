@@ -1,4 +1,4 @@
-import { createPedido, deletePedido,getPedido, getPedidosSinEnviar, getPedidosUsuario, patchPedido } from "../controllers/Pedidos.js";
+import { createPedido, deletePedido,getPedido, getPedidosSinEnviar, getPedidos, patchPedido } from "../controllers/Pedidos.js";
 import {Router} from 'express';
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/buscar/:id', getPedido );
 router.get('/buscar', getPedidos );
 
 // Endpoint GET (muchos) /prueba
-router.get('/usuario/:idUsuario', getPedidosUsuario );
+router.get('/usuario', getPedidosSinEnviar );
 
 // Endpoint POST /prueba
 router.post('/crear', createPedido );
