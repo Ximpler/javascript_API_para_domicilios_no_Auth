@@ -11,8 +11,8 @@ export async function getProducto(req, res) {
 }
 
 export async function getProductos(req, res) {
-  const restaurante = req.query.id_Restaurante; // Obtén el producto desde los parámetros de consulta
-  const categoria = req.query.categoria; // Obtén la categoría desde los parámetros de consulta
+  const restaurante = req.query.id_Restaurante; 
+  const categoria = req.query.categoria;
 
   let filtros = {};
 
