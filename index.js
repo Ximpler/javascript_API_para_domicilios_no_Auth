@@ -26,11 +26,12 @@ app.use(express.json());
 import usuarioRuta from './routes/Usuario.js';
 import restauranteRuta from './routes/Restaurantes.js';
 import productoRuta from './routes/Productos.js';
+import pedidoRuta from './routes/Pedidos.js';
 
 app.use('/usuario', usuarioRuta);
 app.use('/restaurante', restauranteRuta);
 app.use('/productos', productoRuta);
-
+app.use('/Pedidos',pedidoRuta);
 
 // Endpoint para 404
 app.use((req, res) => {
