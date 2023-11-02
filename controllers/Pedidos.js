@@ -108,3 +108,5 @@ export async function deletePedido(req, res) {
       res.status(500).json({ mensaje: 'Error al inhabilitando el pedido' });
     }
   }
+
+  
