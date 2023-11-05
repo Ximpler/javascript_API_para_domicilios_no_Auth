@@ -32,7 +32,6 @@ export async function getPedidos(req, res) {
   }
 
   filtros['inhabilitado.valor'] = false;
-  console.log(filtros);
   let pedidosFiltrados = await Pedidos.find(filtros);
 
   if (pedidosFiltrados.length > 0) {
@@ -94,7 +93,6 @@ export async function patchPedido(req, res) {
 
 
 export async function deletePedido(req, res) {
-    //res.status(200).json({});
     try {
       const pedidoEliminado = await Pedidos.findOneAndUpdate({_id : req.params.id,  'inhabilitado.valor': false  }, {
         inhabilitado: { valor: true, fecha_inhabilitado: new Date() },

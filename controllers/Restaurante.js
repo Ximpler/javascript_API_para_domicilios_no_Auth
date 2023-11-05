@@ -28,7 +28,6 @@ export async function getRestaurantes(req, res) {
 
   let restaurantesFiltrados = await Restaurantes.find(filtros);
 
-  console.log(filtros)
   if (restaurantesFiltrados.length > 0) {
     res.status(200).json(restaurantesFiltrados);
   } else {
