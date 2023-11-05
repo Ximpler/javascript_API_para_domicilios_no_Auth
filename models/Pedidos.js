@@ -5,7 +5,6 @@ const pedidoSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     requiered: true,
   },
-  inhabilitado: Boolean,
   productos: {
     type: [
       {

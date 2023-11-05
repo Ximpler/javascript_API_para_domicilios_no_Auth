@@ -1,5 +1,5 @@
 import Pedidos from '../models/Pedidos';
-import Restaurante from '../models/Restaurante';
+import Restaurante from '../models/Restaurantes';
 
 export async function getPedido(req, res) {
   const pedidoId = req.params.id; // Obtén el ID del pedido desde la URL
@@ -20,11 +20,11 @@ export async function getPedidos(req, res) {
   let filtros = {};
 
   if (restaurante) {
-    filtros.id_Restaurante = restaurante;
+    filtros.id_restaurante = restaurante;
   }
 
   if (usuario) {
-    filtros.usuario = usuario;
+    filtros.id_cliente = usuario;
   }
 
   if (fechaDesde && fechaHasta) {
@@ -32,11 +32,11 @@ export async function getPedidos(req, res) {
   }
 
   filtros['inhabilitado.valor'] = false;
-
+  console.log(filtros);
   let pedidosFiltrados = await Pedidos.find(filtros);
 
   if (pedidosFiltrados.length > 0) {
-    res.status(200).json(pedidosFiltrados);
+  res.status(200).json(pedidosFiltrados);
   } else {
     res.status(404).json({ mensaje: 'No se encontraron pedidos que coincidan con los filtros' });
   }
@@ -44,8 +44,8 @@ export async function getPedidos(req, res) {
 
 export async function getPedidosSinEnviar(req, res){
     try {
-        const pedidosSinAceptar = await Pedido.find({
-          estado: 'En Curso', // Puedes ajustar el estado según tu modelo de datos
+        const pedidosSinAceptar = await Pedidos.find({
+          estado: 'En Curso', 
         }).exec();
     
         res.json(pedidosSinAceptar);
@@ -60,7 +60,6 @@ export async function createPedido(req, res) {
     const pedido = new Pedidos(nuevoPedido);
     const resultado = await pedido.save();
     await actualizarPopularidadRestaurante(req.body.id_restaurante);
-
     res.status(200).json(resultado);
   } catch (err) {
     res.status(500).json(err);
@@ -68,7 +67,7 @@ export async function createPedido(req, res) {
 }
 
 async function actualizarPopularidadRestaurante(restauranteId) {
-    const cantidadPedidos = await Pedido.countDocuments({ id_restaurante: restauranteId }).exec();
+    const cantidadPedidos = await Pedidos.countDocuments({ id_restaurante: restauranteId }).exec();
     const restaurante = await Restaurante.findById(restauranteId);
   
     if (restaurante) {
