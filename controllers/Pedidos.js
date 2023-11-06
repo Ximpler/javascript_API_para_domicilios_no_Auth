@@ -45,6 +45,7 @@ export async function getPedidosSinEnviar(req, res){
     try {
         const pedidosSinAceptar = await Pedidos.find({
           estado: 'En Curso', 
+          "inhabilitado.valor" : false
         }).exec();
     
         res.json(pedidosSinAceptar);
@@ -78,16 +79,24 @@ async function actualizarPopularidadRestaurante(restauranteId) {
 export async function patchPedido(req, res) {
   const idPedido = req.params.id;
   const cambios = req.body;
-  const pedidoExistente = await Pedidos.find({_id: idPedido, 'inhabilitado.valor': false});
-  if (pedidoExistente && pedidoExistente.estado != 'Entregado'){
-    try {
-      await Pedidos.findOneAndUpdate({ _id: idPedido, 'inhabilitado.valor': false }, cambios);
-      res.status(200).json({ mensaje: 'Pedido modificado correctamente' });
-    } catch (err) {
-      res.status(500).json({ mensaje: 'Error al modificar el pedido' });
+  try {
+    // Buscar el pedido por ID y asegurarse de que no esté inhabilitado
+    const pedidoExistente = await Pedidos.findOne({ _id: idPedido, 'inhabilitado.valor': false });
+
+    if (pedidoExistente) {
+      if (pedidoExistente.estado !== 'Entregado') {
+        // Actualizar el pedido si no está entregado
+        await Pedidos.findByIdAndUpdate(idPedido, cambios);
+        const pedidoActualizado = await Pedidos.findById(idPedido);
+        res.status(200).json({ mensaje: 'Pedido modificado correctamente', pedido: pedidoActualizado });
+      } else {
+        res.status(403).json({ mensaje: 'El pedido ya fue entregado.' });
+      }
+    } else {
+      res.status(403).json({ mensaje: 'El pedido no existe o ha sido eliminado.' });
     }
-  }else{
-    res.status(403).json({mensaje:'El pedido ya fue entregado o ha sido eliminado.'});
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al modificar el pedido' });
   }
 }
 

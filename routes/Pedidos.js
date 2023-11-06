@@ -9,7 +9,7 @@ router.get('/buscar/:id', getPedido );
 router.get('/buscar', getPedidos );
 
 // Endpoint GET (muchos) /prueba
-router.get('/sinenviar', getPedidosSinEnviar );
+router.get('/sinEnviar', getPedidosSinEnviar );
 
 // Endpoint POST /prueba
 router.post('/crear', createPedido );
